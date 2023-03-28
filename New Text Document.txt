@@ -1,0 +1,389 @@
+class Node:
+    id = None  # Unique value for each node.
+    up = None  # Represents value of neighbors (up, down, left, right).
+    down = None
+    left = None
+    right = None
+    previousNode = None  # Represents value of neighbors.
+    dash = False
+
+
+    def __init__(self, value):
+        self.value = value
+
+
+class SearchAlgorithms:
+    ''' * DON'T change Class, Function or Parameters Names and Order
+        * You can add ANY extra functions,
+          classes you need as long as the main
+          structure is left as is '''
+    path = []  # Represents the correct path from start node to the goal node.
+    fullPath = []  # Represents all visited nodes from the start node to the goal node.
+
+    mazeNodes = []
+    fullmazeNodes=[[]]
+    n=[]
+    def __init__(self, mazeStr):
+        ''' mazeStr contains the full board
+         The board is read row wise,
+        the nodes are numbered 0-based starting
+        the leftmost node'''
+        maze = [j.split(',') for j in mazeStr.split(' ')]
+        # for i in range (len(maze)):
+        #   print(maze[i])
+        # ----------------------------------------------
+        # for i in range(len(maze)):
+        #    for j in range (len(maze[0])):
+        #        print(maze[i][j], end=" ")
+        #    print('\n')
+        # -------------------------------
+        rows=0
+        for i in range(len(maze)):
+            rows+=1
+        columns=0
+        for i in range(len(maze[0])):
+            columns+=1
+        ID = 0
+        for i in range(len(maze)):
+            for j in range(len(maze[0])):
+                if (maze[i][j] == 'S'):
+                    node = Node(maze[i][j])
+                    node.id = ID
+                    ID += 1
+                    self.mazeNodes.append(node)
+                elif (maze[i][j] == '.'):
+                    node = Node(maze[i][j])
+                    node.id = ID
+                    ID += 1
+                    self.mazeNodes.append(node)
+                elif (maze[i][j] == '#'):
+                    node = Node(maze[i][j])
+                    node.id = ID
+                    ID += 1
+                    if (maze[i][j] == '#'):
+                        node.dash = True
+                    self.mazeNodes.append(node)
+                elif (maze[i][j] == 'E'):
+                    node = Node(maze[i][j])
+                    node.id = ID
+                    ID += 1
+                    self.mazeNodes.append(node)
+        #-------------------------------------
+        for i in range(len(self.mazeNodes)):
+            print(self.mazeNodes[i].id,end="][")
+        print('\n')
+        #print(rows)
+        #print(columns)
+        x=0
+       # for y in range (len(self.mazeNodes)):#num Of Rows
+        for i in range (rows):#num Of Rows
+            for j in range(columns):#num Of Colunms
+                self.n.append(self.mazeNodes[x])
+                x+=1
+            self.fullmazeNodes.append(self.n)
+            self.n=[]
+        #for i in range(rows):  # num Of Rows
+         #   for j in range(columns):  # num Of Colunms
+          #      print(self.fullmazeNodes[i+1][j].id)
+        #for i in range (rows):
+         #   print(self.fullmazeNodes[i+1])
+        print(self.fullmazeNodes[5][0].id)
+        print(self.fullmazeNodes[5][0].dash)
+       # A=np.array(self.mazeNodes(np.random.normal(size=(len(self.mazeNodes),len(self.mazeNodes[0])))))
+        #print(A)
+        # for i in range(rows):
+        #   for j in range(columns):
+        #      print(self.fullmazeNodes[i][j].id,end="][")
+        # print('\n')
+
+        #-**********
+        #for i in range (len(self.mazeNodes)):
+         #  if(self.mazeNodes[i].dash==True):
+          #      print(self.mazeNodes[i].id,end="][")
+        #-***********
+        #for i in range(len(self.mazeNodes)):
+         #   print(self.mazeNodes[i].dash==True,end="][")
+        # ------------------------------------
+        for i in range(len(maze)):
+            for j in range(len(maze[0])):
+                if (maze[i][j] == 'S'):
+                    self.Start = maze[i][j]
+                if (maze[i][j] == 'E'):
+                    self.End = maze[i][j]
+
+    def DFS(self):
+        # Fill the correct path in self.path
+        # self.fullPath should contain the order of visited nodes
+        # self.path should contain the direct path from start node to goal node
+        return self.fullPath, self.path
+
+
+# endregion
+-----------------------------------------------------------------------------------
+# region SearchAlgorithms
+class Node:
+    value = None  # Represents value of element in board
+    id = None  # Unique value for each node.
+    up = None  # Represents value of neighbors (up, down, left, right).
+    down = None
+    left = None
+    right = None
+    previousNode = None  # Represents value of neighbors.
+    def __init__(self, value):
+        self.value = value
+
+
+class SearchAlgorithms:
+    """* DON'T change Class, Function or Parameters Names and Order
+            * You can add ANY extra functions,
+              classes you need as long as the main
+              structure is left as is """
+
+    path = []  # Represents the correct path from start node to the goal node.
+    fullPath = []  # Represents all visited nodes from the start node to the goal node.
+    totalCost = -1  # Represents the total cost in case using UCS, AStar (Euclidean or Manhattan)
+    board1 = [[]]
+    board_num = [[]]
+
+    def __init__(self, mazeStr, edgeCost=None):
+        """mazeStr contains the full board
+         The board is read row wise,
+        the nodes are numbered 0-based starting
+        the leftmost node"""
+        maze = []
+        count = 0
+        maze = list(mazeStr)
+        for i in maze:
+            if i == ',':
+                maze.remove(',')
+            else:
+                continue
+
+
+        c = 0
+        nodes = []
+        board = []
+        board_number = []
+        # get range of sub list
+        for x in maze:
+            if x == " ":
+                break
+            else:
+                c = c + 1
+        for i in maze:
+            if i == " ":
+                count = count + 1
+                count = count - 1
+            else:
+                count = count + 1
+        for i in maze:
+            if i == ' ':
+                maze.remove(i)
+            else:
+                continue
+        for x in range(count):
+            nodes.append(Node(x))
+        d: int = int(count / c)
+        j: int = 0
+
+        for x in range(d):
+            board.append([])
+            board_number.append([])
+            for i in range(c):
+                board[x].append(maze[j])
+                board_number[x].append(j)
+                j = j + 1
+
+        h = 0
+        for x in board:
+            for i in x:
+                nodes[h].id = h
+                nodes[h].value = i
+                if edgeCost != None :
+                    nodes[h].edgeCost=edgeCost[h]
+                h = h + 1
+        h = 0
+
+        for x in range(d):
+            for i in range(c):
+                if x == 0:
+                    if i == 0:
+                        nodes[h].up = None
+                        nodes[h].down = board_number[x + 1][i]
+                        nodes[h].left = None
+                        nodes[h].right = board_number[x][i + 1]
+                        h = h + 1
+                    elif i == len(board[1])-1:
+                        nodes[h].up = None
+                        nodes[h].down = board_number[x + 1][i]
+                        nodes[h].left = board_number[x][i - 1]
+                        nodes[h].right = None
+                        h = h + 1
+                    else :
+                        nodes[h].up = None
+                        nodes[h].down = board_number[x + 1][i]
+                        nodes[h].left = board_number[x][i - 1]
+                        nodes[h].right = board_number[x][i+1]
+                        h = h + 1
+                elif len(board) - 1 == x:
+                    if i == 0:
+                        nodes[h].up = board_number[x - 1][i]
+                        nodes[h].down = None
+                        nodes[h].left = None
+                        nodes[h].right = board_number[x][i + 1]
+                        h = h + 1
+                    elif i == c - 1:
+                        nodes[h].up = board_number[x - 1][i]
+                        nodes[h].down = None
+                        nodes[h].left = board_number[x][i - 1]
+                        nodes[h].right = None
+                        h = h + 1
+                    else :
+                        nodes[h].up = board_number[x - 1][i]
+                        nodes[h].down = None
+                        nodes[h].left = board_number[x][i - 1]
+                        nodes[h].right = board_number[x][i + 1]
+                        h = h + 1
+                else:
+                    if i == len(board[1])-1:
+                        nodes[h].up = board_number[x - 1][i]
+                        nodes[h].down = board_number[x + 1][i]
+                        nodes[h].left = board_number[x][i - 1]
+                        nodes[h].right = None
+                        h = h + 1
+                    elif i == 0:
+                        nodes[h].up = board_number[x - 1][i]
+                        nodes[h].down = board_number[x + 1][i]
+                        nodes[h].left = None
+                        nodes[h].right = board_number[x][i + 1]
+                        h = h + 1
+                    else:
+                        nodes[h].up = board_number[x - 1][i]
+                        nodes[h].down = board_number[x + 1][i]
+                        nodes[h].left = board_number[x][i - 1]
+                        nodes[h].right = board_number[x][i + 1]
+                        h = h + 1
+
+        self.board1 = board
+        self.board_num = board_number
+        self.nodes1 = nodes
+        # pass
+
+    def DFS(self):
+        # Fill the correct path in self.path
+        # self.fullPath should contain the order of visited nodes
+        # self.path should contain the direct path from start node to goal node
+        vis = []
+        opened = []
+        # opened=deque()
+        # trace me code in paper and consider if node visit i ignore this
+        m = 0
+        s = 0
+        h = 0
+
+        for x in self.board1:
+            for i in x:
+                if i == 'S':
+                    h = m
+                    #   vis.append(i)
+                    opened.append(self.nodes1[m].id)
+                    break
+                m = m + 1
+        # flag = 0
+        # list1 = []
+        # branch = 0
+        f = 0
+        while self.nodes1[s].value != "E":
+            # for z in range (100):
+            #  print('found in list.')
+            s = opened[0]
+            # branch = branch + 1
+            # when stop or know visited node
+            # if self.nodes1[s].value == "E":
+            # flag = 1
+            if self.nodes1[s].value == "#" or self.nodes1[s].id in vis:
+                opened.remove(s)
+                f = 1
+
+            else:
+                # for x in range(branch):
+                #   list1.append([])
+
+                if self.nodes1[s].right != None:
+                    opened.insert(0, self.nodes1[s].right)
+                if self.nodes1[s].down != None:
+                    opened.insert(0, self.nodes1[s].down)
+                if self.nodes1[s].left != None:
+                    opened.insert(0, self.nodes1[s].left)
+                if self.nodes1[s].up != None:
+                    opened.insert(0, self.nodes1[s].up)
+
+            if f == 1:
+                f = 0
+            else:
+                vis.append(s)
+                opened.remove(s)
+        # vis.append(s)
+        g = len(vis) - 1
+        # self.path.append(s)
+        self.fullPath = vis.copy()
+        opened.clear()
+        opened.append(s)
+        # for x in range(12):
+        while self.nodes1[s].id != h:
+            s = vis[g - 1]
+            if self.nodes1[s].up != h and self.nodes1[s].up == vis[g]:
+                if self.nodes1[s].down in opened:
+                    while self.nodes1[s].down != opened[0]:
+                        opened.pop(0)
+                if self.nodes1[s].right in opened:
+                    while self.nodes1[s].right != opened[0]:
+                        opened.pop(0)
+                if self.nodes1[s].left in opened:
+                    while self.nodes1[s].left != opened[0]:
+                        opened.pop(0)
+                opened.insert(0, self.nodes1[s].id)
+            elif self.nodes1[s].right != h and self.nodes1[s].right == vis[g]:
+                if self.nodes1[s].down in opened:
+                    while self.nodes1[s].down != opened[0]:
+                        opened.pop(0)
+                if self.nodes1[s].up in opened:
+                    while self.nodes1[s].up != opened[0]:
+                        opened.pop(0)
+                if self.nodes1[s].left in opened:
+                    while self.nodes1[s].left != opened[0]:
+                        opened.pop(0)
+                opened.insert(0, self.nodes1[s].id)
+            elif self.nodes1[s].left != h and self.nodes1[s].left == vis[g]:
+                if self.nodes1[s].down in opened:
+                    while self.nodes1[s].down != opened[0]:
+                        opened.pop(0)
+                if self.nodes1[s].right in opened:
+                    while self.nodes1[s].right != opened[0]:
+                        opened.pop(0)
+                if self.nodes1[s].up in opened:
+                    while self.nodes1[s].up != opened[0]:
+                        opened.pop(0)
+                opened.insert(0, self.nodes1[s].id)
+            elif self.nodes1[s].down != h and self.nodes1[s].down == vis[g]:
+                if self.nodes1[s].right in opened:
+                    while self.nodes1[s].right != opened[0]:
+                        opened.pop(0)
+                if self.nodes1[s].right in opened:
+                    while self.nodes1[s].right != opened[0]:
+                        opened.pop(0)
+                if self.nodes1[s].up in opened:
+                    while self.nodes1[s].up != opened[0]:
+                        opened.pop(0)
+                opened.insert(0, self.nodes1[s].id)
+
+            else:
+                # opened.insert(0, h)
+                vis.remove(s)
+            # vis.pop()
+            g = g - 1
+        self.path = opened.copy()
+        return self.fullPath, self.path
+
+
+# endregion
